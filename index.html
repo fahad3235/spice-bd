@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spice BD — মসলার ভান্ডার | Bangladeshi Spice Guide</title>
+<meta name="description" content="Offline bilingual EN/বাংলা guide to Bangladeshi kitchen spices: flavours, dishes, substitutes, blend builder, spice box and quiz.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">🌶️</div>
+    <div>
+      <h1>Spice BD <span class="brand-bn">মসলার ভান্ডার</span></h1>
+      <p class="tagline" data-i18n="tagline"></p>
+    </div>
+  </div>
+  <button id="langToggle" class="lang-btn" type="button" aria-label="Switch language / ভাষা বদলান">বাংলা</button>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="Sections">
+  <button class="tab active" data-tab="spices" role="tab" aria-selected="true" data-i18n="tabSpices">Spices</button>
+  <button class="tab" data-tab="blends" role="tab" aria-selected="false" data-i18n="tabBlends">Blends</button>
+  <button class="tab" data-tab="box" role="tab" aria-selected="false" data-i18n="tabBox">My Spice Box</button>
+  <button class="tab" data-tab="quiz" role="tab" aria-selected="false" data-i18n="tabQuiz">Quiz</button>
+  <button class="tab" data-tab="data" role="tab" aria-selected="false" data-i18n="tabData">My Data</button>
+</nav>
+
+<main>
+  <!-- SPICES -->
+  <section id="tab-spices" class="panel active" role="tabpanel">
+    <div class="toolbar">
+      <input id="searchInput" type="search" data-i18n-ph="searchPh" placeholder="Search by name — হলুদ, turmeric, holud…" aria-label="Search spices">
+      <select id="formFilter" aria-label="Filter by form"></select>
+      <label class="fav-only"><input type="checkbox" id="favOnly"> <span data-i18n="favOnly">Favourites only</span></label>
+    </div>
+    <p class="count" id="spiceCount" aria-live="polite"></p>
+    <div id="spiceGrid" class="grid"></div>
+    <p id="noResults" class="empty hidden" data-i18n="noResults">No spice matches that search. Try another name.</p>
+  </section>
+
+  <!-- BLENDS -->
+  <section id="tab-blends" class="panel" role="tabpanel">
+    <h2 data-i18n="blendTitle">Blend builder</h2>
+    <div class="blend-layout">
+      <div class="blend-pick">
+        <label for="blendSelect" data-i18n="blendPick">Pick a blend</label>
+        <select id="blendSelect"></select>
+        <p id="blendDesc" class="muted"></p>
+        <label for="blendTotal" data-i18n="blendTotal">Total amount (grams)</label>
+        <input id="blendTotal" type="number" min="10" max="5000" step="10" value="100" inputmode="numeric">
+        <p id="blendError" class="error hidden" role="alert"></p>
+        <button id="blendCopy" class="btn" type="button" data-i18n="blendCopy">Copy recipe</button>
+        <p id="blendCopied" class="ok hidden" data-i18n="blendCopied">Recipe copied!</p>
+      </div>
+      <div class="blend-result">
+        <h3 data-i18n="blendResult">You need</h3>
+        <ul id="blendRows" class="blend-rows"></ul>
+        <div class="blend-bar" id="blendBar" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPICE BOX -->
+  <section id="tab-box" class="panel" role="tabpanel">
+    <h2 data-i18n="boxTitle">My Spice Box</h2>
+    <p class="muted" data-i18n="boxHint">Tick the spices you already have at home. The missing ones become your shopping list.</p>
+    <p class="count" id="boxCount" aria-live="polite"></p>
+    <div id="boxList" class="box-list"></div>
+    <div class="shop">
+      <h3><span data-i18n="boxShop">Shopping list</span> <span id="shopCount" class="pill"></span></h3>
+      <ul id="shopList" class="shop-list"></ul>
+      <p id="boxEmpty" class="empty hidden" data-i18n="boxEmpty">You have everything — your spice box is full!</p>
+      <button id="boxCopy" class="btn" type="button" data-i18n="boxCopy">Copy shopping list</button>
+      <p id="boxCopied" class="ok hidden" data-i18n="boxCopied">Shopping list copied!</p>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="tab-quiz" class="panel" role="tabpanel">
+    <h2 data-i18n="quizTitle">Guess the spice</h2>
+    <div id="quizStart" class="quiz-start">
+      <p class="muted" id="quizIntro"></p>
+      <p><span data-i18n="quizBest">Best score</span>: <strong id="quizBest">0 / 10</strong></p>
+      <button id="quizStartBtn" class="btn big" type="button" data-i18n="quizStart">Start quiz</button>
+    </div>
+    <div id="quizPlay" class="hidden">
+      <p class="count"><span data-i18n="quizQ">Question</span> <span id="quizNum">1</span> <span data-i18n="quizOf">of</span> <span id="quizTotal">10</span> · <span data-i18n="quizScore">Score</span>: <strong id="quizScore">0</strong></p>
+      <div class="quiz-clue" id="quizClue"></div>
+      <div id="quizOptions" class="quiz-options"></div>
+      <p id="quizFeedback" class="quiz-feedback" aria-live="polite"></p>
+      <button id="quizNext" class="btn hidden" type="button">Next →</button>
+    </div>
+    <div id="quizDone" class="hidden">
+      <h3 data-i18n="quizDone">Quiz finished!</h3>
+      <p class="big-score"><span data-i18n="quizScore">Score</span>: <strong id="quizFinal">0 / 10</strong></p>
+      <p><span data-i18n="quizBest">Best score</span>: <strong id="quizBest2">0 / 10</strong></p>
+      <button id="quizAgain" class="btn big" type="button" data-i18n="quizAgain">Play again</button>
+    </div>
+  </section>
+
+  <!-- DATA -->
+  <section id="tab-data" class="panel" role="tabpanel">
+    <h2 data-i18n="dataTitle">My data</h2>
+    <p class="muted" id="dataSummary"></p>
+    <div class="data-actions">
+      <button id="exportBtn" class="btn" type="button" data-i18n="exportBtn">Export my data (JSON)</button>
+      <label class="btn file-btn" for="importFile" data-i18n="importBtn">Import data (JSON)</label>
+      <input id="importFile" type="file" accept="application/json,.json" class="sr-only">
+    </div>
+    <p id="dataMsg" class="ok hidden" role="status"></p>
+    <p id="dataErr" class="error hidden" role="alert"></p>
+    <hr>
+    <button id="eraseBtn" class="btn danger" type="button" data-i18n="eraseBtn">Erase everything</button>
+    <div id="eraseBox" class="hidden">
+      <p data-i18n="eraseConfirm">Type DELETE to erase all your favourites, spice box, notes and scores.</p>
+      <input id="eraseInput" type="text" autocomplete="off" placeholder="DELETE">
+      <button id="eraseConfirmBtn" class="btn danger" type="button">DELETE</button>
+      <p id="eraseDone" class="ok hidden" data-i18n="eraseDone">All data erased.</p>
+    </div>
+  </section>
+</main>
+
+<!-- Detail dialog -->
+<dialog id="detailDialog" class="detail">
+  <button class="dialog-close" id="dialogClose" type="button" aria-label="Close">✕</button>
+  <div id="detailBody"></div>
+</dialog>
+
+<footer>
+  <p data-i18n="footer">A learning guide, not a cookbook — taste and adjust to your own kitchen. Works fully offline.</p>
+  <p class="muted small">Spice BD · 24 spices · 4 blends · no account, no network — your data stays on your device.</p>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/core.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
